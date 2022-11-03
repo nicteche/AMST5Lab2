@@ -37,7 +37,7 @@ public class PerfilUsuario extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
         finish();
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("msg", "cerrarSesion");
+        intent.putExtra("msg", "closeSession");
         startActivity(intent);
     }
 
