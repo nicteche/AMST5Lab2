@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
@@ -30,7 +31,7 @@ public class PerfilUsuario extends AppCompatActivity {
         txt_name.setText(info_user.get("user_name"));
         txt_email.setText(info_user.get("user_email"));
         String photo = info_user.get("user_photo");
-        Picasso.with(getApplicationContext()).load(photo).into(imv_photo);
+        Picasso.get().load(photo).into(imv_photo);
     }
     public void cerrarSesion(View view){
         FirebaseAuth.getInstance().signOut();

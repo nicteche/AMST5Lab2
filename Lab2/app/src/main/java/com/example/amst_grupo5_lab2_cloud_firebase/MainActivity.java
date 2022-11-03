@@ -51,14 +51,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mAuth = FirebaseAuth.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-    }
+
+        Intent intent = getIntent();
+        String msg = intent.getStringExtra("msg");
+        if(msg != null){
+            if(msg.equals("cerrarSesion")){
+                cerrarSesion();
+                }
+            }
+        }
+    private void cerrarSesion() {
+        mGoogleSignInClient.signOut().addOnCompleteListener(this,
+                task -> updateUI(null));
+        }
 
     public void iniciarSesion(View view) {
         resultLauncher.launch(new Intent(mGoogleSignInClient.getSignInIntent()));
@@ -84,13 +95,6 @@ public class MainActivity extends AppCompatActivity {
             String name = user.getDisplayName();
             String email = user.getEmail();
             String photo = String.valueOf(user.getPhotoUrl());
-        } else {
-            System.out.println("sin registrarse");
-        }
-    }
-
-    private void updateUI(FirebaseUser user) {
-        if (user != null) {
             HashMap<String, String> info_user = new HashMap<String, String>();
             info_user.put("user_name", user.getDisplayName());
             info_user.put("user_email", user.getEmail());
@@ -100,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, PerfilUsuario.class);
             intent.putExtra("info_user", info_user);
             startActivity(intent);
+
         } else {
             System.out.println("sin registrarse");
         }
