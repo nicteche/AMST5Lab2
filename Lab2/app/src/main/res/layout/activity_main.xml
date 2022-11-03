@@ -36,14 +36,14 @@
             android:layout_height="224dp"
             android:gravity="center"
             android:text="Inicio de sesion con google "
-            android:textSize="24sp"></TextView>
+            android:textSize="24sp"/>
 
         <Button
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="iniciarSesion"
-            android:text="Iniciar sesion"> </Button>
+            android:text="Iniciar sesion"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
