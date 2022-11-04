@@ -9,18 +9,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
 public class PerfilUsuario extends AppCompatActivity {
 
+    TextView txt_id, txt_name, txt_email;
+    ImageView imv_photo;
+    DatabaseReference db_reference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_usuario);
-    TextView txt_id, txt_name, txt_email;
-    ImageView imv_photo;
         Intent intent = getIntent();
         HashMap<String, String> info_user = (HashMap<String, String>)intent.getSerializableExtra("info_user");
         txt_id = findViewById(R.id.txt_userId);
@@ -32,12 +35,13 @@ public class PerfilUsuario extends AppCompatActivity {
         txt_email.setText(info_user.get("user_email"));
         String photo = info_user.get("user_photo");
         Picasso.get().load(photo).into(imv_photo);
+
     }
     public void cerrarSesion(View view){
         FirebaseAuth.getInstance().signOut();
         finish();
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("msg", "closeSession");
+        intent.putExtra("msg", "cerrarSesion");
         startActivity(intent);
     }
 
