@@ -1,5 +1,7 @@
 package com.example.amst_grupo5_lab2_cloud_firebase;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -23,7 +24,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.HashMap;
 
-
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
@@ -32,12 +32,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
         Intent intent = getIntent();
         String msg = intent.getStringExtra("msg");
         if(msg != null){
@@ -46,23 +42,27 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    private void cerrarSesion() {
-        mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> updateUI(null));
-    }
 
     public void iniciarSesion(View view) {
         resultLauncher.launch(new Intent(mGoogleSignInClient.getSignInIntent()));
     }
+    private void cerrarSesion() {
+        mGoogleSignInClient.signOut().addOnCompleteListener(this,
+                task -> updateUI(null));
+    }
 
-    ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if (result.getResultCode() == Activity.RESULT_OK) {
-            Intent intent = result.getData();
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                if (account != null) firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-                Log.w("TAG", "Fallo el inicio de sesión con google.", e);
+    ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>(){
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                Intent intent = result.getData();
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
+                try {
+                    GoogleSignInAccount account = task.getResult(ApiException.class);
+                    if (account != null) firebaseAuthWithGoogle(account);
+                } catch (ApiException e) {
+                    Log.w("TAG", "Fallo el inicio de sesión con google.", e);
+                }
             }
         }
     });
@@ -80,10 +80,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            HashMap<String, String> info_user = new HashMap<>();
+            HashMap<String, String> info_user = new HashMap<String, String>();
             info_user.put("user_name", user.getDisplayName());
             info_user.put("user_email", user.getEmail());
             info_user.put("user_photo", String.valueOf(user.getPhotoUrl()));
@@ -92,11 +91,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, PerfilUsuario.class);
             intent.putExtra("info_user", info_user);
             startActivity(intent);
-
         } else {
             System.out.println("sin registrarse");
         }
     }
-
-
 }
+
