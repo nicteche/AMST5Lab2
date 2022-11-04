@@ -1,5 +1,6 @@
 package com.example.amst_grupo5_lab2_cloud_firebase;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -59,13 +60,13 @@ public class PerfilUsuario extends AppCompatActivity {
     public void leerTweets(){
         db_reference.child("Grupo0").child("tweets").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     System.out.println(snapshot);
                 }
             }
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 System.out.println(error.toException());
             }
         });
@@ -73,7 +74,7 @@ public class PerfilUsuario extends AppCompatActivity {
     public void escribirTweets(String autor){
         String tweet = "hola mundo firebase 2";
         String fecha = "03/11/2022"; //Fecha actual
-        Map<String, String> hola_tweet = new HashMap<String, String>();
+        Map<String, String> hola_tweet = new HashMap<>();
         hola_tweet.put("autor", autor);
         hola_tweet.put("fecha", fecha);
         DatabaseReference tweets = db_reference.child("Grupo0").child("tweets");

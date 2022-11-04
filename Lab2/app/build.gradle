@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace 'com.example.amst_grupo5_lab2_cloud_firebase'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.amst_grupo5_lab2_cloud_firebase"
         minSdk 19
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
