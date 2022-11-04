@@ -30,6 +30,7 @@ public class PerfilUsuario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_usuario);
         Intent intent = getIntent();
+        @SuppressWarnings("unchecked")
         HashMap<String, String> info_user = (HashMap<String, String>)intent.getSerializableExtra("info_user");
         txt_id = findViewById(R.id.txt_userId);
         txt_name = findViewById(R.id.txt_nombre);
